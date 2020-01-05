@@ -13,11 +13,12 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity {
     private Player playerOne;
     private Player playerTwo;
+    private CounterStack cs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        cs =new CounterStack();
         playerOne = new Player();
         playerTwo = new Player();
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         headButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View arg0) {
                 playerOne.addScore(3);
+                cs.push(new Pair<Player, Integer>(playerOne, 3));
                 // 取得ID為score的元件
                 TextView result = (TextView) findViewById(R.id.score);
                 result.setText(playerOne.getScore() + "");
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         bodyButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View arg0) {
                 playerOne.addScore(2);
+                cs.push(new Pair<Player, Integer>(playerOne, 2));
                 // 取得ID為score的元件
                 TextView result = (TextView) findViewById(R.id.score);
                 result.setText(playerOne.getScore() + "");
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         spinButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View arg0) {
                 playerOne.addScore(4);
+                cs.push(new Pair<Player, Integer>(playerOne, 4));
                 // 取得ID為score的元件
                 TextView result = (TextView) findViewById(R.id.score);
                 result.setText(playerOne.getScore() + "");
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View arge0) {
 
                 playerOne.addScore(5);
+                cs.push(new Pair<Player, Integer>(playerOne, 5));
                 TextView result = (TextView) findViewById(R.id.score);
                 result.setText(playerOne.getScore() + "");
             }
@@ -75,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View arge0) {
 
                 playerTwo.addScore(3);
+                cs.push(new Pair<Player, Integer>(playerTwo, 3));
                 TextView result = (TextView) findViewById(R.id.score_2);
                 result.setText(playerTwo.getScore() + "");
             }
@@ -84,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         body2Button.setOnClickListener( new Button.OnClickListener(){
             public void onClick(View arge0){
                 playerTwo.addScore(2);
+                cs.push(new Pair<Player, Integer>(playerTwo, 2));
                 TextView result =(TextView)findViewById(R.id.score_2);
                 result.setText(playerTwo.getScore()+"");
             }
@@ -92,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         spin2Button.setOnClickListener(new Button.OnClickListener(){
             public  void onClick(View arge0){
                 playerTwo.addScore(4);
+                cs.push(new Pair<Player, Integer>(playerTwo, 4));
                 TextView result=(TextView)findViewById(R.id.score_2);
                 result.setText(playerTwo.getScore()+"");
             }
@@ -100,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         spinhead2Button.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View arge0){
                 playerTwo.addScore(5);
+                cs.push(new Pair<Player, Integer>(playerTwo, 5));
                 TextView result=(TextView)findViewById(R.id.score_2);
                 result.setText(playerTwo.getScore()+"");
             }
@@ -110,11 +119,37 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 playerOne.setScore(0);
                 playerTwo.setScore(0);
+                cs.clear();
                 TextView result=(TextView)findViewById(R.id.score);
                 TextView result2= (TextView)findViewById(R.id.score_2);
                 result.setText(playerOne.getScore()+"");
                 result2.setText(playerTwo.getScore()+"");
 
+
+            }
+        });
+
+        Button ud =(Button)findViewById(R.id.ud);
+        ud.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Pair<Player, Integer> lastHit = cs.pop();
+                if(lastHit != null){
+                    Player lastPlayer = lastHit.getKey();
+                    Integer lastScore = lastHit.getValue();
+                    if (lastPlayer.equals(playerOne)){
+                        playerOne.delScore(lastScore);
+                    }else if(lastPlayer.equals(playerTwo)) {
+                        playerTwo.delScore(lastScore);
+                    }
+
+                }
+
+
+                TextView result=(TextView)findViewById(R.id.score);
+                TextView result2= (TextView)findViewById(R.id.score_2);
+                result.setText(playerOne.getScore()+"");
+                result2.setText(playerTwo.getScore()+"");
 
             }
         });
